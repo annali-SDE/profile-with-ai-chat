@@ -285,6 +285,116 @@ h2 {
   justify-content: center;
 }
 
+.chat-shell {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.chat-header h3 {
+  font-size: 1.25rem;
+}
+
+.chat-messages {
+  border: 1px solid var(--line);
+  border-radius: 0.8rem;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 0.8rem;
+  max-height: 380px;
+  overflow: auto;
+  display: grid;
+  gap: 0.7rem;
+}
+
+.chat-bubble {
+  border: 1px solid var(--line);
+  border-radius: 0.7rem;
+  padding: 0.7rem 0.8rem;
+  max-width: 90%;
+}
+
+.chat-bubble p {
+  margin: 0;
+}
+
+.chat-bubble.user {
+  margin-left: auto;
+  background: linear-gradient(145deg, rgba(125, 139, 255, 0.2), rgba(183, 33, 255, 0.1));
+}
+
+.chat-bubble.assistant {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.chat-role {
+  font-size: 0.76rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #95a0cc;
+  margin-bottom: 0.35rem !important;
+}
+
+.chat-prompts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.prompt-chip {
+  border: 1px solid rgba(148, 162, 232, 0.35);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--text-300);
+  padding: 0.35rem 0.7rem;
+  cursor: pointer;
+}
+
+.prompt-chip:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.chat-form {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.chat-form input {
+  flex: 1;
+  min-width: 0;
+  border: 1px solid var(--line);
+  border-radius: 0.65rem;
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text-100);
+  padding: 0.7rem 0.8rem;
+  font: inherit;
+}
+
+.chat-form input:focus {
+  outline: 1px solid rgba(125, 139, 255, 0.7);
+  outline-offset: 1px;
+}
+
+.chat-form .btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.chat-error {
+  margin: 0;
+  color: #ff9fa5;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
 @media (max-width: 720px) {
   .hero {
     padding-top: 3.5rem;
@@ -297,5 +407,9 @@ h2 {
 
   .metrics-grid {
     grid-template-columns: 1fr;
+  }
+
+  .chat-form {
+    flex-direction: column;
   }
 }

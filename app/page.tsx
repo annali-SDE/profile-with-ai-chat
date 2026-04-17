@@ -1,3 +1,5 @@
+import DigitalTwinChat from "./components/DigitalTwinChat";
+
 const careerJourney = [
   {
     role: "Software Development Engineer",
@@ -73,6 +75,7 @@ export default function Home() {
         <div className="brand-mark">AL</div>
         <nav>
           <a href="#about">About</a>
+          <a href="#ai-twin">AI Twin</a>
           <a href="#journey">Journey</a>
           <a href="#connect">Connect</a>
         </nav>
@@ -127,6 +130,10 @@ export default function Home() {
           <p className="metric-label">Edge</p>
           <p className="metric-value">Speed + Clarity</p>
         </article>
+      </section>
+
+      <section id="ai-twin" className="content-width panel">
+        <DigitalTwinChat />
       </section>
 
       <section id="journey" className="content-width panel">
