@@ -1,8 +1,8 @@
-import { NextResponse } from "next/server";
+import { NextResponse } from 'next/server';
 
 type ChatMessage = {
-  role: "user" | "assistant" | "system";
-  content: string;
+	role: 'user' | 'assistant' | 'system';
+	content: string;
 };
 
 const DIGITAL_TWIN_SYSTEM_PROMPT = `
@@ -37,85 +37,85 @@ Behavior:
 - For recruiting-style questions, emphasize enterprise readiness, full-stack ownership, and collaborative execution.
 `.trim();
 
-const OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions";
-const MODEL = "openai/gpt-oss-120b";
+const OPENROUTER_URL = 'https://openrouter.ai/api/v1/chat/completions';
+const MODEL = 'openai/gpt-oss-120b';
 
 export async function POST(req: Request) {
-  try {
-    const body = (await req.json()) as { messages?: ChatMessage[] };
-    const incomingMessages = body.messages?.filter(
-      (message) =>
-        (message.role === "user" || message.role === "assistant") &&
-        typeof message.content === "string" &&
-        message.content.trim().length > 0
-    );
+	try {
+		const body = (await req.json()) as { messages?: ChatMessage[] };
+		const incomingMessages = body.messages?.filter(
+			(message) =>
+				(message.role === 'user' || message.role === 'assistant') &&
+				typeof message.content === 'string' &&
+				message.content.trim().length > 0
+		);
 
-    if (!incomingMessages || incomingMessages.length === 0) {
-      return NextResponse.json(
-        { error: "Please send at least one message." },
-        { status: 400 }
-      );
-    }
+		if (!incomingMessages || incomingMessages.length === 0) {
+			return NextResponse.json(
+				{ error: 'Please send at least one message.' },
+				{ status: 400 }
+			);
+		}
 
-    const apiKey =
-      process.env.OPENROUTER_AOI_KEY ??
-      process.env.OPENROUTER_API_KEY ??
-      process.env.OPENROUTER_KEY;
+		const apiKey =
+			process.env.OPENROUTER_AOI_KEY ??
+			process.env.OPENROUTER_API_KEY ??
+			process.env.OPENROUTER_KEY;
 
-    if (!apiKey) {
-      return NextResponse.json(
-        { error: "OpenRouter API key not configured on server." },
-        { status: 500 }
-      );
-    }
+		if (!apiKey) {
+			return NextResponse.json(
+				{ error: 'OpenRouter API key not configured on server.' },
+				{ status: 500 }
+			);
+		}
 
-    const response = await fetch(OPENROUTER_URL, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-        "Content-Type": "application/json",
-        "HTTP-Referer": "http://localhost:3000",
-        "X-Title": "Anna Li Digital Twin Site"
-      },
-      body: JSON.stringify({
-        model: MODEL,
-        messages: [
-          { role: "system", content: DIGITAL_TWIN_SYSTEM_PROMPT },
-          ...incomingMessages
-        ],
-        temperature: 0.5,
-        max_tokens: 500
-      })
-    });
+		const response = await fetch(OPENROUTER_URL, {
+			method: 'POST',
+			headers: {
+				Authorization: `Bearer ${apiKey}`,
+				'Content-Type': 'application/json',
+				'HTTP-Referer': 'http://localhost:3000',
+				'X-Title': 'Anna Li Digital Twin Site'
+			},
+			body: JSON.stringify({
+				model: MODEL,
+				messages: [
+					{ role: 'system', content: DIGITAL_TWIN_SYSTEM_PROMPT },
+					...incomingMessages
+				],
+				temperature: 0.5,
+				max_tokens: 500
+			})
+		});
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      return NextResponse.json(
-        {
-          error: "OpenRouter request failed.",
-          details: errorText
-        },
-        { status: 502 }
-      );
-    }
+		if (!response.ok) {
+			const errorText = await response.text();
+			return NextResponse.json(
+				{
+					error: 'OpenRouter request failed.',
+					details: errorText
+				},
+				{ status: 502 }
+			);
+		}
 
-    const data = (await response.json()) as {
-      choices?: Array<{ message?: { content?: string } }>;
-    };
+		const data = (await response.json()) as {
+			choices?: Array<{ message?: { content?: string } }>;
+		};
 
-    const reply = data.choices?.[0]?.message?.content?.trim();
-    if (!reply) {
-      return NextResponse.json(
-        { error: "Model returned an empty response." },
-        { status: 502 }
-      );
-    }
+		const reply = data.choices?.[0]?.message?.content?.trim();
+		if (!reply) {
+			return NextResponse.json(
+				{ error: 'Model returned an empty response.' },
+				{ status: 502 }
+			);
+		}
 
-    return NextResponse.json({ reply });
-  } catch {
-    return NextResponse.json(
-      { error: "Unable to process chat request." },
-      { status: 500 }
-    );
-  }
+		return NextResponse.json({ reply });
+	} catch {
+		return NextResponse.json(
+			{ error: 'Unable to process chat request.' },
+			{ status: 500 }
+		);
+	}
 }
